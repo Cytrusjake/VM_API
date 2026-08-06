@@ -1,48 +1,55 @@
-from result import Result
+from managers.base import BaseManager
 
 
-class AgentService:
+class AgentManager(BaseManager):
 
-    def __init__(self, shell):
+    COMMANDS = {
+        "GitPull"   : "git_pull",
+        "Version"   : "version",
+        "Branch"    : "branch",
+        "Restart"   : "restart",
+        "Status"    : "status",
+        "Ping"      : "ping"
+    }
 
-        self.shell = shell
+    @property
+    def agent(self):
+        return self.services["agent"]
 
    
-    def git_pull(self, directory):
+    def git_pull(self, params):
 
-        return self.shell.run_result(
-            f'cd "{directory}" && git pull'
+        return self.agent.git_pull(
+            params["Directory"]
+        )
+
+    def version(self, params):
+
+        return self.agent.version(
+            params["Directory"]
+        )
+
+    def branch(self, params):
+
+        return self.agent.branch(
+            params["Directory"]
         )
 
     
-    def version(self, directory):
+    def restart(self, params):
 
-        return self.shell.run_result(
-            f'cd "{directory}" && git rev-parse --short HEAD'
+        return self.agent.restart(
+            params["Service"]
         )
 
-    def branch(self, directory):
+    def status(self, params):
 
-        return self.shell.run_result(
-            f'cd "{directory}" && git branch --show-current'
+        return self.agent.status(
+            params["Service"]
         )
 
-    
-    def restart(self, service):
+   
+    def ping(self, params):
 
-        return self.shell.run_result(
-            f"systemctl restart {service}"
-        )
-
-    def status(self, service):
-
-        return self.shell.run_result(
-            f"systemctl status {service} --no-pager"
-        )
-
-    
-    def ping(self):
-
-        return Result.success_result(
-            message = "Pong"
-        )
+        return self.agent.ping()
+        
