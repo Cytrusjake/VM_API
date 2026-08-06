@@ -31,13 +31,21 @@ class BaseManager(ABC):
    
     def execute(self, message):
 
-        handler = self.COMMANDS.get(message.action)
+        handler_name = self.COMMANDS.get(message.action)
 
-        if handler is None:
+        if handler_name is None:
 
             return Result.failed_result(
                 f"Unknown action '{message.action}' "
                 f"for namespace '{message.namespace}'"
+            )
+
+        handler = getattr(self, handler_name, None)
+
+        if handler is None:
+
+            return Result.failed_result(
+                f"Handler '{handler_name}' is not implemented."
             )
 
         try:
@@ -53,5 +61,4 @@ class BaseManager(ABC):
             self.logger.exception(ex)
 
             return Result.failed_result(ex)
-
             
