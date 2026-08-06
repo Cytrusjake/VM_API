@@ -7,7 +7,7 @@ class FilesystemService:
 
         self.shell = shell
 
-   def create_directory(self, path):
+    def create_directory(self, path):
 
         return self.shell.run_result(
             f'mkdir -p "{path}"'
