@@ -141,12 +141,23 @@ class PikaClient:
                 self.config.pika_response_queue
             )
 
+           
+            self.publish(
+                reply_queue,
+                response
+            )
+
             self.logger.info(
                 f"Published response to '{reply_queue}'"
             )
 
+        
             channel.basic_ack(
-                delivery_tag = method.delivery_tag
+                delivery_tag=method.delivery_tag
+            )
+
+            self.logger.info(
+                f"Acknowledged message {command.message_id}"
             )
 
             self.logger.info(
