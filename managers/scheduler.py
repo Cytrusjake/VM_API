@@ -17,6 +17,7 @@ class SchedulerManager(BaseManager):
         "Enable"   : "enable",
         "Disable"  : "disable",
         "Run"      : "run"
+
     }
 
     def __init__(self, context):
@@ -28,7 +29,7 @@ class SchedulerManager(BaseManager):
 
         return self.services["scheduler"]
 
-   
+    
     def restart(self, params):
 
         return self.scheduler.restart(
@@ -52,8 +53,8 @@ class SchedulerManager(BaseManager):
         return self.scheduler.status(
             params["Directory"]
         )
-
     
+
     def list(self, params):
 
         return self.scheduler.list(
@@ -63,8 +64,7 @@ class SchedulerManager(BaseManager):
     def install(self, params):
 
         return self.scheduler.install(
-            params["Directory"],
-            params["File"]
+            params["Directory"]
         )
 
     def remove_all(self, params):
@@ -73,7 +73,6 @@ class SchedulerManager(BaseManager):
             params["Directory"]
         )
 
-   
     def add(self, params):
 
         return self.scheduler.add(
@@ -109,5 +108,3 @@ class SchedulerManager(BaseManager):
             params["Directory"],
             params["Command"]
         )
-
-        
