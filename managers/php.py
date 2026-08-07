@@ -5,6 +5,7 @@ class PHPManager(BaseManager):
 
     COMMANDS = {
         "Version"               : "version",
+        "Status"                : "status",
         "Info"                  : "info",
         "Modules"               : "modules",
         "Configuration"         : "configuration",
@@ -35,6 +36,12 @@ class PHPManager(BaseManager):
 
     def version(self, params):
         return self.php.version(
+            params["Directory"]
+        )
+
+    def status(self, params):
+
+        return self.php.status(
             params["Directory"]
         )
 

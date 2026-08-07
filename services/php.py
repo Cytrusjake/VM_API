@@ -13,6 +13,13 @@ class PHPService:
             "docker compose exec -T php php -v"
         )
 
+    def status(self, directory):
+
+        return self.compose._run(
+            directory,
+            "docker compose ps php"
+        )
+        
     def info(self, directory):
 
         return self.compose._run(
