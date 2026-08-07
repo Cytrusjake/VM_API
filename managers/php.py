@@ -11,6 +11,7 @@ class PHPManager(BaseManager):
         "RestartFPM"            : "restart_fpm",
         "ReloadFPM"             : "reload_fpm",
         "OpcacheReset"          : "opcache_reset",
+        "GetSetting"            : "get_setting",
         "SetMemoryLimit"        : "set_memory_limit",
         "SetUploadMaxFilesize"  : "set_upload_max_filesize",
         "SetPostMaxSize"        : "set_post_max_size",
@@ -31,28 +32,50 @@ class PHPManager(BaseManager):
     def php(self):
         return self.services["php"]
 
-   
+
     def version(self, params):
-        return self.php.version(params["Directory"])
+        return self.php.version(
+            params["Directory"]
+        )
 
     def info(self, params):
-        return self.php.info(params["Directory"])
+        return self.php.info(
+            params["Directory"]
+        )
 
     def modules(self, params):
-        return self.php.modules(params["Directory"])
+        return self.php.modules(
+            params["Directory"]
+        )
 
     def configuration(self, params):
-        return self.php.configuration(params["Directory"])
+        return self.php.configuration(
+            params["Directory"]
+        )
 
+    def get_setting(self, params):
+        return self.php.get_setting(
+            params["Directory"],
+            params["Key"]
+        )
+
+   
     def restart_fpm(self, params):
-        return self.php.restart_fpm(params["Directory"])
+        return self.php.restart_fpm(
+            params["Directory"]
+        )
 
     def reload_fpm(self, params):
-        return self.php.reload_fpm(params["Directory"])
+        return self.php.reload_fpm(
+            params["Directory"]
+        )
 
     def opcache_reset(self, params):
-        return self.php.opcache_reset(params["Directory"])
+        return self.php.opcache_reset(
+            params["Directory"]
+        )
 
+   
     def set_memory_limit(self, params):
         return self.php.set_memory_limit(
             params["Directory"],

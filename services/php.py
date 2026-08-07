@@ -46,7 +46,7 @@ class PHPService:
 
         return self.compose._run(
             directory,
-            "docker compose exec -T php kill -USR2 1"
+            'docker compose exec -T php sh -c "kill -USR2 1"'
         )
 
    
