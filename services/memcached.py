@@ -49,28 +49,29 @@ class MemcachedService:
 
         return self.compose._run(
             directory,
-            f'docker compose exec -T {self.SERVICE} sh -c \'echo "stats" | nc localhost 11211\''
+            f'docker compose exec -T {self.SERVICE} sh -c \'printf "stats\\r\\nquit\\r\\n" | nc localhost 11211\''
         )
 
     def settings(self, directory):
 
         return self.compose._run(
             directory,
-            f'docker compose exec -T {self.SERVICE} sh -c \'echo "stats settings" | nc localhost 11211\''
+            f'docker compose exec -T {self.SERVICE} sh -c \'printf "stats settings\\r\\nquit\\r\\n" | nc localhost 11211\''
         )
 
+        
     def slabs(self, directory):
 
         return self.compose._run(
             directory,
-            f'docker compose exec -T {self.SERVICE} sh -c \'echo "stats slabs" | nc localhost 11211\''
+            f'docker compose exec -T {self.SERVICE} sh -c \'printf "stats slabs\\r\\nquit\\r\\n" | nc localhost 11211\''
         )
 
     def items(self, directory):
 
         return self.compose._run(
             directory,
-            f'docker compose exec -T {self.SERVICE} sh -c \'echo "stats items" | nc localhost 11211\''
+            f'docker compose exec -T {self.SERVICE} sh -c \'printf "stats items\\r\\nquit\\r\\n" | nc localhost 11211\''
         )
 
    
@@ -78,7 +79,7 @@ class MemcachedService:
 
         return self.compose._run(
             directory,
-            f'docker compose exec -T {self.SERVICE} sh -c \'echo "flush_all" | nc localhost 11211\''
+            f'docker compose exec -T {self.SERVICE} sh -c \'printf "flush_all\\r\\nquit\\r\\n" | nc localhost 11211\''
         )
 
         
