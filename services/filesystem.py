@@ -134,9 +134,12 @@ class FilesystemService:
 
     def untar(self, archive, destination):
 
-        return self.shell.run_result(
+        command = (
+            f'mkdir -p "{destination}" && '
             f'tar xzf "{archive}" -C "{destination}"'
         )
+
+        return self.shell.run_result(command)
 
    
     def find(self, path, pattern):
