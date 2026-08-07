@@ -93,7 +93,6 @@ class VarnishService:
 
         return self.compose._run(
             directory,
-            f"docker compose exec -T {self.SERVICE} varnishd -V"
+            f'docker compose exec -T {self.SERVICE} sh -c \'varnishadm banner | grep "^varnish-"\''
         )
-
         
