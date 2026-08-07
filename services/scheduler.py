@@ -9,7 +9,7 @@ class SchedulerService:
 
         self.compose = compose
 
-   
+    
     def restart(self, directory):
 
         return self.compose._run(
@@ -46,11 +46,12 @@ class SchedulerService:
             f"docker compose exec -T {self.SERVICE} crontab -l"
         )
 
-    def install(self, directory, file):
+    def install(self, directory):
 
         return self.compose._run(
             directory,
-            f"docker compose exec -T {self.SERVICE} crontab {file}"
+            f"docker compose exec -T {self.SERVICE} "
+            f"crontab /etc/tenant-cron/crontab"
         )
 
     def remove_all(self, directory):
@@ -60,7 +61,6 @@ class SchedulerService:
             f"docker compose exec -T {self.SERVICE} crontab -r"
         )
 
-    
     def add(self, directory, expression):
 
         command = (
@@ -85,7 +85,6 @@ class SchedulerService:
             command
         )
 
-    
     def enable(self, directory, expression):
 
         command = (
@@ -114,12 +113,10 @@ class SchedulerService:
             command
         )
 
-    
+   
     def run(self, directory, command):
 
         return self.compose._run(
             directory,
             f"docker compose exec -T {self.SERVICE} {command}"
         )
-
-        
