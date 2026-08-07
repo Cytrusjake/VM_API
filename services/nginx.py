@@ -5,90 +5,97 @@ from result import Result
 
 class NginxService:
 
+    SERVICE = "nginx"
+
     def __init__(self, compose):
+
         self.compose = compose
 
     def restart(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose restart nginx"
+            f"docker compose restart {self.SERVICE}"
         )
 
     def start(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose start nginx"
+            f"docker compose start {self.SERVICE}"
         )
 
     def stop(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose stop nginx"
+            f"docker compose stop {self.SERVICE}"
+        )
+
+    def status(self, directory):
+
+        return self.compose._run(
+            directory,
+            f"docker compose ps {self.SERVICE}"
         )
 
     def reload(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose exec -T nginx nginx -s reload"
+            f"docker compose exec -T {self.SERVICE} nginx -s reload"
         )
 
    
+
     def test(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose exec -T nginx nginx -t"
+            f"docker compose exec -T {self.SERVICE} nginx -t"
         )
 
     def version(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose exec -T nginx nginx -v"
+            f"docker compose exec -T {self.SERVICE} nginx -v"
+        )
+
+    def config(self, directory):
+
+        return self.compose._run(
+            directory,
+            f"docker compose exec -T {self.SERVICE} nginx -T"
+        )
+
+    def modules(self, directory):
+
+        return self.compose._run(
+            directory,
+            f"docker compose exec -T {self.SERVICE} nginx -V"
         )
 
     def list_vhosts(self, directory):
 
         return self.compose._run(
             directory,
-            "docker compose exec -T nginx ls -1 /etc/nginx/conf.d"
+            f"docker compose exec -T {self.SERVICE} ls -1 /etc/nginx/conf.d"
         )
 
-    
-    def access_log(self, directory, lines = 100):
+   
+    def access_log(self, directory, lines=100):
 
         return self.compose.logs(
             directory,
-            service = "nginx",
-            lines   = lines
+            service=self.SERVICE,
+            lines=lines
         )
 
     def error_log(self, directory, lines=100):
 
         return self.compose.logs(
             directory,
-            service = "nginx",
-            lines   = lines
+            service=self.SERVICE,
+            lines=lines
         )
-
-    
-    def config(self, directory):
-
-        return self.compose._run(
-            directory,
-            "docker compose exec -T nginx nginx -T"
-        )
-
-    
-    def modules(self, directory):
-
-        return self.compose._run(
-            directory,
-            "docker compose exec -T nginx nginx -V"
-        )
-
-        
