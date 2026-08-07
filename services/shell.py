@@ -5,10 +5,7 @@ from result import Result
 
 class ShellService:
 
-    ####################################################################
-    # Execute
-    ####################################################################
-
+   
     def execute(
         self,
         command,
@@ -25,17 +22,19 @@ class ShellService:
             text=True
         )
 
-        return {
-            "success": result.returncode == 0,
-            "returncode": result.returncode,
-            "stdout": result.stdout.strip(),
-            "stderr": result.stderr.strip()
-        }
+        class Response:
+            pass
 
-    ####################################################################
-    # Execute and return Result
-    ####################################################################
+        response = Response()
 
+        response.success = (result.returncode == 0)
+        response.returncode = result.returncode
+        response.stdout = result.stdout.strip()
+        response.stderr = result.stderr.strip()
+
+        return response
+
+   
     def run_result(
         self,
         command,
@@ -49,14 +48,15 @@ class ShellService:
             timeout=timeout
         )
 
-        if response["success"]:
+        if response.success:
 
             return Result.success_result(
                 data={
-                    "stdout": response["stdout"]
+                    "stdout": response.stdout,
+                    "stderr": response.stderr
                 }
             )
 
         return Result.failed_result(
-            error=response["stderr"]
+            error=response.stderr
         )
