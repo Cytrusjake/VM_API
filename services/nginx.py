@@ -45,15 +45,17 @@ class NginxService:
    
 
     def test(self, directory):
-        return self.compose._run(
-            directory,
-            f"docker compose exec -T {self.SERVICE} nginx -t"
-        )
 
-    def version(self, directory):
         return self.compose._run(
             directory,
-            f"docker compose exec -T {self.SERVICE} nginx -v"
+            f"docker compose exec -T {self.SERVICE} sh -c 'nginx -t 2>&1'"
+        )
+        
+    def version(self, directory):
+
+        return self.compose._run(
+            directory,
+            f"docker compose exec -T {self.SERVICE} sh -c 'nginx -v 2>&1'"
         )
 
     def config(self, directory):
@@ -63,9 +65,10 @@ class NginxService:
         )
 
     def modules(self, directory):
+
         return self.compose._run(
             directory,
-            f"docker compose exec -T {self.SERVICE} nginx -V"
+            f"docker compose exec -T {self.SERVICE} sh -c 'nginx -V 2>&1'"
         )
 
     def list_vhosts(self, directory):
@@ -109,13 +112,13 @@ class NginxService:
     def access_log(self, directory, lines=100):
         return self.compose.logs(
             directory,
-            service=self.SERVICE,
-            lines=lines
+            service = self.SERVICE,
+            lines   = lines
         )
 
     def error_log(self, directory, lines=100):
         return self.compose.logs(
             directory,
-            service=self.SERVICE,
-            lines=lines
+            service = self.SERVICE,
+            lines   = lines
         )
