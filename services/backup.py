@@ -1,4 +1,6 @@
 from datetime import datetime
+import re
+import shlex
 
 
 class BackupService:
@@ -12,6 +14,20 @@ class BackupService:
         self.compose = compose
         self.filesystem = filesystem
 
+   
+    def _validate_database(self, database):
+
+        if not isinstance(database, str):
+            raise ValueError("Database must be a string")
+
+        if not re.fullmatch(r"[A-Za-z0-9_$-]+", database):
+            raise ValueError(
+                f"Invalid database name: {database!r}. "
+                "Only letters, numbers, _, $, and - are allowed."
+            )
+
+        return database
+
     
     def backup_database(
         self,
@@ -19,6 +35,8 @@ class BackupService:
         database,
         destination
     ):
+
+        database = self._validate_database(database)
 
         filename = (
             f"{database}-"
@@ -29,9 +47,12 @@ class BackupService:
 
         command = (
             "docker compose exec -T mariadb "
-            'sh -c '
-            f'"mariadb-dump -uroot -p$MYSQL_ROOT_PASSWORD '
-            f'{database}" > "{file}"'
+            "sh -c "
+            f"'mariadb-dump "
+            f'-uroot -p"$MYSQL_ROOT_PASSWORD" '
+            f'{shlex.quote(database)}' 
+            "' "
+            f"> {shlex.quote(file)}"
         )
 
         return self.compose._run(
@@ -39,7 +60,7 @@ class BackupService:
             command
         )
 
-    
+   
     def backup_files(
         self,
         source,
@@ -83,7 +104,7 @@ class BackupService:
             destination
         )
 
-    
+   
     def restore_database(
         self,
         directory,
@@ -91,11 +112,16 @@ class BackupService:
         backup
     ):
 
+        database = self._validate_database(database)
+
         command = (
             "docker compose exec -T mariadb "
-            'sh -c '
-            f'"mariadb -uroot -p$MYSQL_ROOT_PASSWORD '
-            f'{database}" < "{backup}"'
+            "sh -c "
+            f"'mariadb "
+            f'-uroot -p"$MYSQL_ROOT_PASSWORD" '
+            f'{shlex.quote(database)}'
+            "' "
+            f"< {shlex.quote(backup)}"
         )
 
         return self.compose._run(
@@ -103,7 +129,7 @@ class BackupService:
             command
         )
 
-    
+   
     def restore_files(
         self,
         archive,
@@ -122,11 +148,8 @@ class BackupService:
             path
         )
 
-    
     def delete(self, file):
 
         return self.filesystem.delete_file(
             file
         )
-
-        
