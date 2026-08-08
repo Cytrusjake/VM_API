@@ -14,6 +14,8 @@ class NginxManager(BaseManager):
         "Config"        : "config",
         "Modules"       : "modules",
         "ListVHosts"    : "list_vhosts",
+        "AddVHost"      : "add_vhost",
+        "RemoveVHost"   : "remove_vhost",
         "AccessLog"     : "access_log",
         "ErrorLog"      : "error_log"
     }
@@ -25,7 +27,7 @@ class NginxManager(BaseManager):
     def nginx(self):
         return self.services["nginx"]
 
-    
+   
 
     def status(self, params):
         return self.nginx.status(
@@ -52,7 +54,7 @@ class NginxManager(BaseManager):
             params["Directory"]
         )
 
-    
+   
     def test(self, params):
         return self.nginx.test(
             params["Directory"]
@@ -78,7 +80,21 @@ class NginxManager(BaseManager):
             params["Directory"]
         )
 
-   
+    
+    def add_vhost(self, params):
+        return self.nginx.add_vhost(
+            params["Directory"],
+            params["Domain"],
+            params["Contents"]
+        )
+
+    def remove_vhost(self, params):
+        return self.nginx.remove_vhost(
+            params["Directory"],
+            params["Domain"]
+        )
+
+    
 
     def access_log(self, params):
         return self.nginx.access_log(
