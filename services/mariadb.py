@@ -70,9 +70,8 @@ class MariaDBService:
 
         return self.compose._run(
             directory,
-            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS `{database}`;"'"""
+            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS {database};"'"""
         )
-
     
     def create_user(self, directory, username, password):
 
@@ -99,13 +98,14 @@ class MariaDBService:
 
         return self.compose._run(
             directory,
-            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON `{database}`.* TO '\''{username}'\''@'\''%'\'';"'"""
+            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON {database}.* TO '\''{username}'\''@'\''%'\'';"'"""
         )
 
     def revoke_all(self, directory, database, username):
+
         return self.compose._run(
             directory,
-            f'docker compose exec -T mariadb mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "REVOKE ALL PRIVILEGES ON `{database}`.* FROM \'{username}\'@\'%\'; FLUSH PRIVILEGES;"'
+            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "REVOKE ALL PRIVILEGES ON {database}.* FROM '\''{username}'\''@'\''%'\''; FLUSH PRIVILEGES;"'"""
         )
 
     
@@ -117,9 +117,10 @@ class MariaDBService:
         )
 
     def repair(self, directory, database):
+
         return self.compose._run(
             directory,
-            f'docker compose exec -T mariadb mysqlcheck -uroot -p"$MYSQL_ROOT_PASSWORD" --repair {database}'
+            f"""docker compose exec -T mariadb sh -c 'mysqlcheck -uroot -p"$MYSQL_ROOT_PASSWORD" --repair {database}'"""
         )
 
     def flush_privileges(self, directory):
