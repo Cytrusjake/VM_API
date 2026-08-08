@@ -63,7 +63,7 @@ class MariaDBService:
 
         return self.compose._run(
             directory,
-            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS `{database}`;"'"""
+            f"""docker compose exec -T mariadb sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS {database};"'"""
         )
 
     def delete_database(self, directory, database):
